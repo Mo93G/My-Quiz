@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+<div class="position-absolute mt-3">
+    <div class="btn-group-vertical">
+
+        {% for value in categories %}
+            {% if value.id <= 10 %}
+                <a type="button" class="btn btn-primary" href="/search/{{value.name}}">{{value.name}}{# parametre catégorie #}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="example-wrapper">
+    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+        {% for i in 0..2 %}
+            {% if quiz[i] is defined %} 
+                <div class="card border-primary me-3" style="max-width: 20rem;" >
+                    <div class="card-header text-center">TOP {{i + 1}} Quiz</div>
+                    <div class="card-body">
+                        <h4 class="card-title text-center">{{quiz[i].name}}   {# parametre Titre Quiz #}</h4>
+                        <p class="card-text"> {# parametre description categorie, nombre de personne finis #} 
+                        Ce Quiz a etais crée par l'utilisateur numéro {{quiz[i].user.id}}</p>
+                    </div>
+                    <a href="/quiz/resolve/{{quiz[i].id}}-1-1" class="card-footer btn"><button type="button" class="btn btn-primary w-100">Quiz</button></a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    
+    </div>
+    <div class="alert mt-3">
+        {# Si c'est un invité afficher le Quiz top 4 OU du meme genre qu'il a deja fait#}
+        <h4 class="alert-heading">Recomandé</h4>
+        <p class="mb-0">Voici un Quiz recomandé par rapport à vos préference <a href="/quiz/resolve/4-1-1" class="alert-link">ici</a>.</p>
+    </div>
+
+
+
+
+</div>
+{% endblock %}

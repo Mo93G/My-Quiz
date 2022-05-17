@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello QuizzController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+<div class="example-wrapper">
+    <div class = "card">
+        <div class="card-header">
+            <span class="me-3" >
+                {% if request['nameQuizzSetting'] is defined %}
+                    Nom : {{request['nameQuizzSetting']}} 
+                    {% set nb_question = request['numberQuestionSetting']  %}
+                    {% set nb_false_response = request['numberResponseSetting'] - 1 %}
+                {% else %}
+                    Quiz Name 
+                {% endif %}
+            </span>
+            <span>
+                {% if request['nameCategorieSetting'] is defined %}
+                    Catégorie : {{request['nameCategorieSetting']}} 
+                {% else %}
+                    Catégorie Name 
+                {% endif %}
+            </span>
+            <button type="button" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#paramQuizModal">
+                <img src="https://img.icons8.com/ios-filled/50/000000/settings.png" width="25"/>
+            </button>
+        </div>
+        {% if request['nameQuizzSetting'] is defined %}
+            <form action="/quiz/create" method="POST" >
+                <div class="card-body">
+                    
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item">
+                            <li class="list-group-item">
+                                <label for="nameQuizzSetting"> Nom du Quiz : </label>
+                                <input type="text" class="form-control" id="nameQuizzSetting"  name="nameQuizzSetting" value="{{ request['nameQuizzSetting'] }}" required >
+                            </li>
+                            <li class="list-group-item">
+                                <label for="nameCategorieSetting"> Nom de categorie : </label>
+                                <input type="text" class="form-control" id="nameCategorieSetting" name="nameCategorieSetting" value="{{ request['nameCategorieSetting'] }}" required >
+                            </li>
+                        </li>
+                    </ul>
+
+                    {% for i in 1..nb_question %}
+                        <div class="text-center">
+                            <h4> Question {{i}}</h4>
+                        </div>
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item">
+                                <li class="list-group-item">
+                                    <input type="text" class="form-control" placeholder="Question" name="question{{i}}" required>
+                                </li>
+                                <li class="list-group-item">
+                                    <input type="text" class="form-control" placeholder="Bonne réponse" name="true_response{{i}}" required>
+                                </li>
+                                {% for a in 1..nb_false_response %}
+                                    <li class="list-group-item">
+                                        <input type="text" class="form-control" placeholder="Mauvaise réponse" name="false_response{{i ~'-' ~ a}}" required>
+                                    </li>
+                                {% endfor %}  
+                            </li>
+                        </ul>
+                    {% endfor %}
+                </div>
+                <div class="card-footer text-center">
+                    <input type="submit" class="btn btn-primary"></button>
+                </div>
+            </form>
+        {% else %}
+            <div class="card-body">
+                <p>Vous devez enregistrer les paramétre de votre Quiz avant de pouvoir le crée, les parametre sont sur le boutton en haut à droite ou ci-dessous.</p>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#paramQuizModal">
+                <img src="https://img.icons8.com/ios-filled/50/000000/settings.png" width="25"/>
+            </button>
+
+        {% endif %}
+    </div>
+
+
+
+<div class="modal fade" id="paramQuizModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Parametre du Quiz</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <form action="/quiz" method="POST">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-form-label " for="nameQuizzSetting">Nom</label>
+                        <input type="text" class="form-control" placeholder="Star Wars Quiz" name="nameQuizzSetting" id="nameQuizzSetting" required >
+
+                        <label class="col-form-label " for="nameCategorieSetting">Catégorie</label>
+                        <input type="text" class="form-control" placeholder="Categorie" name="nameCategorieSetting" id="nameCategorieSetting" required>
+
+                        <label for="numberResponseSetting" class="form-label mt-4">Nombre de réponse</label>
+                        <select class="form-select" name="numberResponseSetting" id="numberResponseSetting" required>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                        
+                        <label for="numberQuestionSetting" class="form-label mt-4">Nombre de question</label>
+                        <select  class="form-select" name="numberQuestionSetting" id="numberQuestionSetting" required>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            <option>16</option>
+                            <option>17</option>
+                            <option>18</option>
+                            <option>19</option>
+                            <option>20</option>
+                        </select>
+                    </div>
+
+                </div>  
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <input type="submit" class="btn btn-primary" ></input>
+                </div>
+            </form> 
+
+        </div>
+    </div>
+</div>
+
+
+</div>
+{% endblock %}
